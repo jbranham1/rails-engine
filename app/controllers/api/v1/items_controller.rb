@@ -1,6 +1,13 @@
 class Api::V1::ItemsController < ApplicationController
   def index
-    render json: ItemSerializer.new(Item.all)
+    if params[:page]
+      item = Item.all.find_page_limit(params[:page])
+    elsif params[:per_page]
+      item = Item.all.find_page_limit(1,params[:per_page])
+    else
+      item = Item.all
+    end
+    render json: ItemSerializer.new(item)
   end
 
   def show
@@ -13,6 +20,7 @@ class Api::V1::ItemsController < ApplicationController
   end
 
   def update
+    #Merchant.find(item_params[:merchant_id])
     item = Item.update(params[:id], item_params)
     render json: ItemSerializer.new(item).serialized_json
   end

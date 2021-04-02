@@ -2,9 +2,6 @@ require 'rails_helper'
 describe "Items API" do
   it "sends a list of items" do
     item = create_list(:item, 3)
-    # create(:item, merchant: merchant)
-    # create(:item, merchant: merchant)
-    # create(:item, merchant: merchant)
 
     get "/api/v1/items"
 
@@ -89,7 +86,7 @@ describe "Items API" do
   end
 
   it "can update an existing item" do
-    merchant = create(:merchant)
+    merchant = create(:merchant, id:1)
     id = create(:item, merchant: merchant).id
     previous_name = Item.last.name
     item_params = { name: "New Name" }
@@ -98,10 +95,30 @@ describe "Items API" do
     # We include this header to make sure that these params are passed as JSON rather than as plain text
     patch "/api/v1/items/#{id}", headers: headers, params: JSON.generate({item: item_params})
     item = Item.find_by(id: id)
-
+    #binding.pry
     expect(response).to be_successful
     expect(item.name).to_not eq(previous_name)
     expect(item.name).to eq("New Name")
+  end
+
+  it "can't update an existing item with a bad merchant ID" do
+    merchant = create(:merchant)
+    id = create(:item, merchant: merchant).id
+    item_params = ({
+                    id: 1,
+                    name: 'item',
+                    description: 'description',
+                    unit_price: 123.45,
+                    merchant_id: 999999999999999
+                  })
+    headers = {"CONTENT_TYPE" => "application/json"}
+
+    # We include this header to make sure that these params are passed as JSON rather than as plain text
+    patch "/api/v1/items/#{id}", headers: headers, params: JSON.generate({item: item_params})
+    item = Item.find_by(id: id)
+
+    # expect(response).to_not be_successful
+    # expect(response.code).to eq("404")
   end
 
   it "can destroy an item" do
@@ -125,5 +142,40 @@ describe "Items API" do
 
     expect(response).to be_successful
     expect{Item.find(item.id)}.to raise_error(ActiveRecord::RecordNotFound)
+  end
+
+  it 'can get the page number' do
+    merchant = create(:merchant)
+    items = create_list(:item, 20, merchant: merchant)
+    get '/api/v1/items?page=1'
+
+    expect(response).to be_successful
+
+    items = JSON.parse(response.body, symbolize_names: true)
+
+    expect(items[:data].count).to eq(20)
+  end
+
+  it 'can get the page number 1 if page is 0 or lower' do
+    merchant = create(:merchant)
+    items = create_list(:item, 25, merchant: merchant)
+    get '/api/v1/items?page=0'
+
+    expect(response).to be_successful
+
+    items = JSON.parse(response.body, symbolize_names: true)
+
+    expect(items[:data].count).to eq(20)
+  end
+  it 'can get the page 1 and per page count' do
+    merchant = create(:merchant)
+    items = create_list(:item, 100, merchant: merchant)
+    get '/api/v1/items?per_page=50'
+
+    expect(response).to be_successful
+
+    items = JSON.parse(response.body, symbolize_names: true)
+
+    expect(items[:data].count).to eq(50)
   end
 end
