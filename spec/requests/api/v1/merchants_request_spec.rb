@@ -38,6 +38,7 @@ describe "Merchants API" do
     expect(attributes).to have_key(:name)
     expect(attributes[:name]).to be_a(String)
   end
+
   it 'can get the page number' do
     create_list(:merchant,25)
     get '/api/v1/merchants?page=1'

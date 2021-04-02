@@ -49,7 +49,7 @@ describe "Merchant Items API" do
     expect(attributes).to be_a(Hash)
     expect(item).to have_key(:id)
     expect(item[:id]).to be_a(String)
-    
+
     expect(attributes).to have_key(:name)
     expect(attributes[:name]).to be_a(String)
 
