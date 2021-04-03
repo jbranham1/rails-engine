@@ -36,7 +36,7 @@ describe "Items API" do
     merchant = create(:merchant)
     id = create(:item, merchant: merchant).id
 
-    get "/api/v1/merchants/#{merchant.id}/items/#{id}"
+    get "/api/v1/items/#{id}"
 
     item = JSON.parse(response.body, symbolize_names: true)[:data]
 
@@ -101,6 +101,16 @@ describe "Items API" do
     expect(item.name).to eq("New Name")
   end
 
+  it "can't update an item that doesn't exist" do
+    item_params = { name: "New Name" }
+    headers = {"CONTENT_TYPE" => "application/json"}
+
+    # We include this header to make sure that these params are passed as JSON rather than as plain text
+    #patch "/api/v1/items/#{99999999}", headers: headers, params: JSON.generate({item: item_params})
+    #expect(response).to_not be_successful
+    #expect(response.code).to eq("404")
+  end
+
   it "can't update an existing item with a bad merchant ID" do
     merchant = create(:merchant)
     id = create(:item, merchant: merchant).id
@@ -109,7 +119,7 @@ describe "Items API" do
                     name: 'item',
                     description: 'description',
                     unit_price: 123.45,
-                    merchant_id: 999999999999999
+                    merchant_id: '999999999999999'
                   })
     headers = {"CONTENT_TYPE" => "application/json"}
 
@@ -117,8 +127,8 @@ describe "Items API" do
     patch "/api/v1/items/#{id}", headers: headers, params: JSON.generate({item: item_params})
     item = Item.find_by(id: id)
 
-    # expect(response).to_not be_successful
-    # expect(response.code).to eq("404")
+    expect(response).to_not be_successful
+    expect(response.code).to eq("404")
   end
 
   it "can destroy an item" do

@@ -8,7 +8,7 @@ class Api::V1::ItemsController < ApplicationController
   end
 
   def create
-    item = Item.create(item_params)
+    item = Item.create!(item_params)
     render json: ItemSerializer.new(item).serialized_json, status: :created
   end
 
@@ -16,7 +16,7 @@ class Api::V1::ItemsController < ApplicationController
     item = Item.find(params[:id])
     #binding.pry
     #if item.merchant_id_exists
-      item = Item.update(params[:id], item_params)
+      item.update!(item_params)
       render json: ItemSerializer.new(item).serialized_json
     # else
     #   binding.pry

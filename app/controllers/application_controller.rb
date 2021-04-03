@@ -1,20 +1,15 @@
 class ApplicationController < ActionController::API
   include ActionController::Helpers
   rescue_from ActiveRecord::RecordNotFound, with: :render_404
-  rescue_from ActiveRecord::RecordInvalid, with: :render_unprocessable_entity_response
-  rescue_from ActiveRecord::Rollback, with: :render_rollback
+  rescue_from ActiveRecord::RecordInvalid, with: :render_invalid_record
   helper_method :page, :per_page
 
   def render_404
     render json: exception.record.errors, status: :not_found
   end
 
-  def render_unprocessable_entity_response
-    render json: exception.record.errors, status: :unprocessable_entity
-  end
-
-  def render_rollback
-    render json: exception.record.errors, status: :not_found
+  def render_invalid_record
+    render json: "Invalid Record", status: :not_found
   end
 
   def page
