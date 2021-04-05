@@ -1,7 +1,7 @@
 class Api::V1::Merchants::SearchController < ApplicationController
   def find
     if params[:name].nil? || params[:name] == ''
-      render json: '', status: 400
+      render json: '', status: :bad_request
     else
       render json: MerchantSerializer.new(Merchant.find_by_name(params[:name]))
       # merchant = Merchant.find_by_name(params[:name])
@@ -17,7 +17,7 @@ class Api::V1::Merchants::SearchController < ApplicationController
 
   def find_all
     if params[:name].nil? || params[:name] == ''
-      render json: '', status: 400
+      render json: '', status: :bad_request
     else
       render json: MerchantSerializer.new(Merchant.find_all_by_name(params[:name]))
     end

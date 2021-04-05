@@ -20,4 +20,12 @@ describe "Item Merchant API" do
     expect(attributes).to have_key(:name)
     expect(attributes[:name]).to be_a(String)
   end
+  it "returns 404 if item is not found" do
+    merchant = create(:merchant)
+    item = create(:item, merchant: merchant)
+
+    get "/api/v1/items/9999999/merchant"
+
+    expect(response).to have_http_status(:not_found)
+  end
 end

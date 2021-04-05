@@ -31,8 +31,13 @@ describe "Merchant Items API" do
 
       expect(attributes).to have_key(:merchant_id)
       expect(attributes[:merchant_id]).to be_a(Integer)
-
     end
+  end
+
+  it "returns 404 if merchant is not found" do
+    get "/api/v1/merchants/99999/items"
+
+    expect(response).to have_http_status(:not_found)
   end
 
   it "can get one merchant by its id" do

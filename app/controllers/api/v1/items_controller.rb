@@ -14,14 +14,8 @@ class Api::V1::ItemsController < ApplicationController
 
   def update
     item = Item.find(params[:id])
-    #binding.pry
-    #if item.merchant_id_exists
-      item.update!(item_params)
-      render json: ItemSerializer.new(item).serialized_json
-    # else
-    #   binding.pry
-    #   render_404
-    # end
+    item.update!(item_params)
+    render json: ItemSerializer.new(item)
   end
 
   def destroy

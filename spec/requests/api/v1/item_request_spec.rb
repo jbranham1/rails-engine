@@ -12,6 +12,9 @@ describe "Items API" do
     expect(items[:data].count).to eq(3)
 
     items[:data].each do |item|
+      expect(item).to have_key(:type)
+      expect(item[:type]).to eq("item")
+
       attributes = item[:attributes]
       expect(attributes).to be_a(Hash)
       expect(item).to have_key(:id)
@@ -85,6 +88,22 @@ describe "Items API" do
     item = JSON.parse(response.body, symbolize_names: true)
   end
 
+  it "can won't create a new item with missing information" do
+    merchant = create(:merchant)
+    item_params = ({
+                    id: 1,
+                    name: 'item',
+                    description: 'description',
+                  })
+    headers = {"CONTENT_TYPE" => "application/json"}
+
+    # We include this header to make sure that these params are passed as JSON rather than as plain text
+    post "/api/v1/items", headers: headers, params: JSON.generate(item: item_params)
+    created_item = Item.last
+
+    expect(response).to have_http_status(:not_found)
+  end
+
   it "can update an existing item" do
     merchant = create(:merchant, id:1)
     id = create(:item, merchant: merchant).id
@@ -105,9 +124,9 @@ describe "Items API" do
     item_params = { name: "New Name" }
     headers = {"CONTENT_TYPE" => "application/json"}
 
-    # We include this header to make sure that these params are passed as JSON rather than as plain text
     #patch "/api/v1/items/#{99999999}", headers: headers, params: JSON.generate({item: item_params})
     #expect(response).to_not be_successful
+  #  expect(response).to have_http_status(:bad_request)
     #expect(response.code).to eq("404")
   end
 
