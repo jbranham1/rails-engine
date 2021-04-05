@@ -3,15 +3,12 @@ class Api::V1::Items::SearchController < ApplicationController
     if params[:name].nil? || params[:name] == ''
       render json: '', status: 400
     else
-      render json: ItemSerializer.new(Item.find_by_name(params[:name]))
-      # merchant = Item.find_by_name(params[:name])
-      # if merchant
-      #   render json: ItemSerializer.new(merchant)
-      # else
-        #render serializer: ItemSerializer, json: {:error => nil, :data => merchant}
-        #render_nil
-        #render :json => errors.add(:msiisdn, {code: 101, message: "cannot be blank"})
-      #end
+      item = Item.find_by_name(params[:name])
+      if item
+         render json: ItemSerializer.new(item)
+       else
+         render json: {:error => nil, :data => Hash}
+      end
     end
   end
 
