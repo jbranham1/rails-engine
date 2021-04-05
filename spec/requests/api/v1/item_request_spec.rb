@@ -166,11 +166,33 @@ describe "Items API" do
   it "can destroy an item" do
     merchant = create(:merchant)
     item = create(:item, merchant: merchant)
+    invoice = create(:invoice)
+    invoice_item = create(:invoice_item, item: item, invoice: invoice)
+
 
     expect{ delete "/api/v1/items/#{item.id}" }.to change(Item, :count).by(-1)
 
     expect(response).to be_successful
     expect{Item.find(item.id)}.to raise_error(ActiveRecord::RecordNotFound)
+    expect{InvoiceItem.find(invoice_item.id)}.to raise_error(ActiveRecord::RecordNotFound)
+    expect{Invoice.find(invoice.id)}.to raise_error(ActiveRecord::RecordNotFound)
+  end
+
+  it "can destroy an item but keeps invoice with multiple items" do
+    merchant = create(:merchant)
+    item = create(:item, merchant: merchant)
+    item2 = create(:item, merchant: merchant)
+    invoice = create(:invoice)
+    invoice_item = create(:invoice_item, item: item, invoice: invoice)
+    invoice_item = create(:invoice_item, item: item2, invoice: invoice)
+
+
+    delete "/api/v1/items/#{item.id}"
+
+    expect(response).to be_successful
+    expect{Item.find(item.id)}.to raise_error(ActiveRecord::RecordNotFound)
+    #expect{InvoiceItem.find(invoice_item.id)}.to raise_error(ActiveRecord::RecordNotFound)
+    expect(Invoice.find(invoice.id)).to eq(invoice)
   end
 
   it 'can get the page number' do

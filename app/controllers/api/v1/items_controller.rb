@@ -19,6 +19,8 @@ class Api::V1::ItemsController < ApplicationController
   end
 
   def destroy
+    item = Item.find(params[:id])
+    delete_invoice(item)
     render json: Item.delete(params[:id])
   end
 
@@ -26,5 +28,20 @@ class Api::V1::ItemsController < ApplicationController
 
   def item_params
     params.require(:item).permit(:name, :description, :unit_price, :merchant_id)
+  end
+
+  def delete_invoice(item)
+    can_delete = can_delete_invoice?(item)
+    item.invoice_items.each do |invoice_item|
+      invoice = invoice_item.invoice
+      InvoiceItem.delete(invoice_item)
+      Invoice.delete(invoice) if can_delete
+    end
+  end
+
+  def can_delete_invoice?(item)
+    item.invoices.all? do |invoice|
+      invoice.items == [item] && invoice.items.count == 1
+    end
   end
 end
