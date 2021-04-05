@@ -21,7 +21,7 @@ class Api::V1::ItemsController < ApplicationController
   def destroy
     item = Item.find(params[:id])
     delete_invoice(item)
-    render json: Item.delete(params[:id])
+    render json: Item.destroy(params[:id])
   end
 
   private
@@ -31,17 +31,8 @@ class Api::V1::ItemsController < ApplicationController
   end
 
   def delete_invoice(item)
-    can_delete = can_delete_invoice?(item)
-    item.invoice_items.each do |invoice_item|
-      invoice = invoice_item.invoice
-      InvoiceItem.delete(invoice_item)
-      Invoice.delete(invoice) if can_delete
-    end
-  end
-
-  def can_delete_invoice?(item)
-    item.invoices.all? do |invoice|
-      invoice.items == [item] && invoice.items.count == 1
+    item.invoices.each do |invoice|
+      invoice.destroy if invoice.items.all? { |invoice_item| invoice_item == item}
     end
   end
 end
