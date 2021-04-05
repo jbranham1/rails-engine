@@ -9,7 +9,7 @@ class Item < ApplicationRecord
   validates :unit_price, numericality: { greater_than_or_equal_to: 0 }
 
   after_find :merchant_id_exists
-  
+
   def merchant_id_exists
     !Merchant.find(merchant_id).nil?
   end
