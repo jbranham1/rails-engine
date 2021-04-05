@@ -191,7 +191,6 @@ describe "Items API" do
 
     expect(response).to be_successful
     expect{Item.find(item.id)}.to raise_error(ActiveRecord::RecordNotFound)
-    #expect{InvoiceItem.find(invoice_item.id)}.to raise_error(ActiveRecord::RecordNotFound)
     expect(Invoice.find(invoice.id)).to eq(invoice)
   end
 

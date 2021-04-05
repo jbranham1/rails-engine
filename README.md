@@ -1,24 +1,42 @@
-# README
+# Rails Engine
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Rails Engine is an open-source API that allows you to search through merchants, items, and their related invoices.
 
-Things you may want to cover:
+## Authors
 
-* Ruby version
+- **Jenny Branham** - [GitHub](https://github.com/jbranham) / [LinkedIn](www.linkedin.com/in/jenny-branham)
 
-* System dependencies
+## Table of Contents
 
-* Configuration
+  - [Authors](#authors)
+  - [Getting Started](#getting-started)
+    - [Prerequisites](#prerequisites)
+    - [Installing](#installing)
+  - [Built With](#built-with)
+  - [License](#license)
 
-* Database creation
+## Getting Started
 
-* Database initialization
+### Prerequisites
 
-* How to run the test suite
+What things you need to install the software and how to install them
 
-* Services (job queues, cache servers, search engines, etc.)
+    * rails
 
-* Deployment instructions
+    ```sh
+    gem install rails --version 5.2.5
+    ```
 
-* ...
+### Installing
+
+    1. Clone Repo
+    2. Install gem packages: `bundle install`
+    3. Setup, Migrate and Seed the database: `rails db:(create,migrate,seed)`
+
+## Built With
+
+  - Ruby/Rails
+
+## License
+
+  This belongs to Jenny Branham.
