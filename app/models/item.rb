@@ -13,4 +13,30 @@ class Item < ApplicationRecord
   def merchant_id_exists
     !Merchant.find(merchant_id).nil?
   end
+
+  def self.find_one_by_min_price(price)
+    find_all_by_min_price(price).first
+  end
+
+  def self.find_all_by_min_price(price)
+    where('unit_price >= ?',price)
+    .order(:name)
+  end
+
+  def self.find_one_by_max_price(price)
+    find_all_by_max_price(price).first
+  end
+
+  def self.find_all_by_max_price(price)
+    where('unit_price <= ?',price)
+    .order(:name)
+  end
+  def self.find_one_by_price_range(min_price, max_price)
+    find_all_by_price_range(min_price, max_price).first
+  end
+
+  def self.find_all_by_price_range(min_price, max_price)
+    where('unit_price >= ? and unit_price <= ?',min_price, max_price)
+    .order(:name)
+  end
 end

@@ -10,7 +10,6 @@ class Merchant < ApplicationRecord
   def self.merchants_with_most_items(quantity)
     select('merchants.*, count(items.id) as item_count')
     .joins(:items)
-    .where()
     .group(:id)
     .order('item_count desc')
     .limit(quantity)
