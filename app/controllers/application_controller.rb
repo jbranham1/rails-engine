@@ -12,6 +12,8 @@ class ApplicationController < ActionController::API
     render json: "Invalid Record", status: :not_found
   end
 
+  private
+
   def page
     params.fetch(:page, 1).to_i
   end
