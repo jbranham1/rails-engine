@@ -1,22 +1,9 @@
 class Api::V1::Merchants::SearchController < ApplicationController
-  def find
-    if params[:name].nil? || params[:name] == ''
-      render json: '', status: :bad_request
-    else
-      merchant = Merchant.find_by_name(params[:name])
-      if merchant
-        render json: MerchantSerializer.new(merchant)
-      else
-        render json: { data: {} }
-      end
-    end
-  end
+  include Findable
 
-  def find_all
-    if params[:name].nil? || params[:name] == ''
-      render json: '', status: :bad_request
-    else
-      render json: MerchantSerializer.new(Merchant.find_all_by_name(params[:name]))
-    end
+  private
+
+  def findable_class
+    Merchant
   end
 end
