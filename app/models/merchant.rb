@@ -7,4 +7,12 @@ class Merchant < ApplicationRecord
 
   validates_presence_of :name
 
+  def self.merchants_with_most_items(quantity)
+    select('merchants.*, count(items.id) as item_count')
+    .joins(:items)
+    .where()
+    .group(:id)
+    .order('item_count desc')
+    .limit(quantity)
+  end
 end

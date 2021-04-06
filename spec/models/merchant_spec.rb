@@ -28,13 +28,21 @@ RSpec.describe Merchant, type: :model do
         expect(Merchant.find_all_by_name('merch')).to eq([merchant2, merchant])
       end
     end
-    # describe "::merchants_with_most_items" do
-    #   it "finds all merchant by name" do
-    #     merchant = create(:merchant, name: 'Merchant')
-    #     merchant2 = create(:merchant, name: ' AMerchant2')
-    #     merchant3 = create(:merchant, name: 'test')
-    #     expect(Merchant.find_all_by_name('merch')).to eq([merchant2, merchant])
-    #   end
-    # end
+    describe "::merchants_with_most_items" do
+      it "finds all merchant by name" do
+        merchant = create(:merchant)
+        create_list(:item, 4, merchant: merchant)
+        merchant2 = create(:merchant)
+        create_list(:item, 5, merchant: merchant2)
+        merchant3 = create(:merchant)
+        create_list(:item, 6, merchant: merchant3)
+        merchant4 = create(:merchant)
+        create_list(:item, 3, merchant: merchant4)
+        merchant5 = create(:merchant)
+        create_list(:item, 2, merchant: merchant5)
+        create_list(:merchant, 5)
+        expect(Merchant.merchants_with_most_items(5)).to eq([merchant3, merchant2, merchant, merchant4, merchant5])
+      end
+    end
   end
 end

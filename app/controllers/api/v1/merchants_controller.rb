@@ -8,7 +8,12 @@ class Api::V1::MerchantsController < ApplicationController
   end
 
   def most_items
-    binding.pry
-    render json: MerchantSerializer.new(Merchant.merchants_with_most_items)
+    render json: MerchantSerializer.new(Merchant.merchants_with_most_items(quantity))
+  end
+
+  private
+
+  def quantity
+    params.fetch(:quantity, 5).to_i
   end
 end
