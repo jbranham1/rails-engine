@@ -1,5 +1,5 @@
 require 'rails_helper'
-describe "Merchant Items API" do
+describe "Merchant Items API", :realistic_error_responses do
   it "sends a list of a merchants items" do
     merchant = create(:merchant)
     create(:item, merchant: merchant)

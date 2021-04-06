@@ -3,11 +3,11 @@ class Api::V1::Merchants::SearchController < ApplicationController
     if params[:name].nil? || params[:name] == ''
       render json: '', status: :bad_request
     else
-       merchant = Merchant.find_by_name(params[:name])
+      merchant = Merchant.find_by_name(params[:name])
       if merchant
-         render json: MerchantSerializer.new(merchant)
-       else
-         render json: {:error => nil, :data => Hash}
+        render json: MerchantSerializer.new(merchant)
+      else
+        render json: { data: {} }
       end
     end
   end

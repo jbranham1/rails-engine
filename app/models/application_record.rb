@@ -12,5 +12,6 @@ class ApplicationRecord < ActiveRecord::Base
 
   def self.find_all_by_name(name)
     where("name ilike ?", "%#{name}%")
+    .order(:name)
   end
 end

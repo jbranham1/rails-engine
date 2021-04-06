@@ -19,8 +19,8 @@ RSpec.describe Item, type: :model do
     describe "::find_by_name" do
       it "finds an item by name" do
         item = create(:item, name: 'Item 1')
-        item2 = create(:item, name: 'Item 2')
-        expect(Item.find_by_name('item')).to eq(item)
+        item2 = create(:item, name: 'A Item 2')
+        expect(Item.find_by_name('item')).to eq(item2)
       end
     end
     describe "::find_all_by_name" do
