@@ -7,6 +7,10 @@ class Merchant < ApplicationRecord
 
   validates_presence_of :name
 
+  def revenue
+    invoice_items.sum(&:revenue)
+  end
+
   def self.merchants_with_most_items(quantity)
     select('merchants.*, sum(invoice_items.quantity) as count')
     .joins(:transactions)

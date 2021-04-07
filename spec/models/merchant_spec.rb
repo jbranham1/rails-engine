@@ -12,6 +12,22 @@ RSpec.describe Merchant, type: :model do
     it {should validate_presence_of :name}
   end
 
+  describe 'instance methods' do
+    describe "#revenue" do
+      it "gets revenue for a merchant" do
+        merchant = create(:merchant, id: 1)
+        item = create(:item, merchant: merchant)
+        item2 = create(:item, merchant: merchant)
+        item3 = create(:item, merchant: merchant)
+        invoice = create(:invoice)
+        invoice_item = create(:invoice_item, invoice: invoice, item: item, quantity:1, unit_price: 2)
+        invoice_item2 = create(:invoice_item, invoice: invoice, item: item2, quantity: 2, unit_price: 1.5)
+        invoice_item3 = create(:invoice_item, invoice: invoice, item: item3, quantity: 3, unit_price: 2)
+        expect(merchant.revenue).to eq (11.00)
+      end
+    end
+  end
+
   describe 'class methods' do
     describe "::find_by_name" do
       it "finds a merchant by name" do
