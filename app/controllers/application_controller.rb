@@ -21,4 +21,8 @@ class ApplicationController < ActionController::API
   def per_page
     params.fetch(:per_page, 20).to_i
   end
+
+  def quantity
+    params.fetch(:quantity, 5).to_i
+  end
 end

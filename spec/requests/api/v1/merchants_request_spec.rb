@@ -180,7 +180,7 @@ describe "Merchants API" do
       expect(attributes[:count]).to be_a(Integer)
     end
   end
-  it 'can get merchants with the most items with a certain quantity' do
+  it 'cant get merchants with most items when quantity as a string' do
     merchant = create(:merchant)
     item = create(:item, merchant: merchant)
     item2 = create(:item, merchant: merchant)
@@ -194,6 +194,5 @@ describe "Merchants API" do
     get "/api/v1/merchants/most_items?quantity='asfasdf"
 
     expect(response).to_not be_successful
-
   end
 end

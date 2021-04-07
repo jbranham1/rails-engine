@@ -14,10 +14,4 @@ class Api::V1::MerchantsController < ApplicationController
       render json: ItemsSoldSerializer.new(Merchant.merchants_with_most_items(quantity))
     end
   end
-
-  private
-
-  def quantity
-    params.fetch(:quantity, 5).to_i
-  end
 end
