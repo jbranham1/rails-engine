@@ -8,7 +8,11 @@ class Api::V1::MerchantsController < ApplicationController
   end
 
   def most_items
-    render json: MerchantSerializer.new(Merchant.merchants_with_most_items(quantity))
+    if params[:quantity].blank? || params[:quantity].to_i < 1
+      render json: ErrorSerializer.new, status: :bad_request
+    else
+      render json: ItemsSoldSerializer.new(Merchant.merchants_with_most_items(quantity))
+    end
   end
 
   private
