@@ -1,5 +1,5 @@
 require 'rails_helper'
-describe "Items API" do
+describe "Items API", :realistic_error_responses do
   it "sends a list of items" do
     item = create_list(:item, 3)
 
@@ -142,7 +142,6 @@ describe "Items API" do
                   })
     headers = {"CONTENT_TYPE" => "application/json"}
 
-    # We include this header to make sure that these params are passed as JSON rather than as plain text
     patch "/api/v1/items/#{id}", headers: headers, params: JSON.generate({item: item_params})
     item = Item.find_by(id: id)
 
@@ -227,5 +226,118 @@ describe "Items API" do
     items = JSON.parse(response.body, symbolize_names: true)
 
     expect(items[:data].count).to eq(50)
+  end
+
+  it 'can get items ranked by descending revenue with a certain quantity' do
+    merchant = create(:merchant)
+    item = create(:item, merchant: merchant)
+    item2 = create(:item, merchant: merchant)
+    item3 = create(:item, merchant: merchant)
+    invoice = create(:invoice)
+    invoice_item = create(:invoice_item, invoice: invoice, item: item)
+    invoice_item2 = create(:invoice_item, invoice: invoice, item: item2)
+    invoice_item3 = create(:invoice_item, invoice: invoice, item: item3)
+    transaction = create(:transaction, invoice: invoice, result: :success)
+    merchant2 = create(:merchant)
+    item4 = create(:item, merchant: merchant2)
+    item5 = create(:item, merchant: merchant2)
+    item6 = create(:item, merchant: merchant2)
+    invoice2 = create(:invoice)
+    invoice_item4 = create(:invoice_item, invoice: invoice2, item: item4)
+    invoice_item5 = create(:invoice_item, invoice: invoice2, item: item5)
+    invoice_item6 = create(:invoice_item, invoice: invoice2, item: item6)
+    transaction2 = create(:transaction, invoice: invoice2, result: :success)
+
+    get '/api/v1/revenue/items?quantity=2'
+
+    expect(response).to be_successful
+
+    items = JSON.parse(response.body, symbolize_names: true)
+
+    expect(items[:data].count).to eq(2)
+
+    items[:data].each do |merchant|
+      expect(merchant).to have_key(:type)
+      expect(merchant[:type]).to eq("item_revenue")
+
+      attributes = merchant[:attributes]
+      expect(attributes).to be_a(Hash)
+      expect(merchant).to have_key(:id)
+      expect(merchant[:id]).to be_a(String)
+
+      expect(attributes).to have_key(:name)
+      expect(attributes[:name]).to be_a(String)
+      expect(attributes).to have_key(:revenue)
+    end
+  end
+
+  it 'can get 10 items ranked by descending revenue when no default quantity' do
+    merchant = create(:merchant)
+    item = create(:item, merchant: merchant)
+    item2 = create(:item, merchant: merchant)
+    item3 = create(:item, merchant: merchant)
+    invoice = create(:invoice)
+    invoice_item = create(:invoice_item, invoice: invoice, item: item)
+    invoice_item2 = create(:invoice_item, invoice: invoice, item: item2)
+    invoice_item3 = create(:invoice_item, invoice: invoice, item: item3)
+    transaction = create(:transaction, invoice: invoice, result: :success)
+    merchant2 = create(:merchant)
+    item4 = create(:item, merchant: merchant2)
+    item5 = create(:item, merchant: merchant2)
+    item6 = create(:item, merchant: merchant2)
+    item7 = create(:item, merchant: merchant2)
+    item8 = create(:item, merchant: merchant2)
+    item9 = create(:item, merchant: merchant2)
+    item10 = create(:item, merchant: merchant2)
+    invoice2 = create(:invoice)
+    invoice_item4 = create(:invoice_item, invoice: invoice2, item: item4)
+    invoice_item5 = create(:invoice_item, invoice: invoice2, item: item5)
+    invoice_item6 = create(:invoice_item, invoice: invoice2, item: item6)
+    invoice_item7 = create(:invoice_item, invoice: invoice2, item: item7)
+    invoice_item8 = create(:invoice_item, invoice: invoice2, item: item8)
+    invoice_item9 = create(:invoice_item, invoice: invoice2, item: item9)
+    invoice_item10 = create(:invoice_item, invoice: invoice2, item: item10)
+    transaction2 = create(:transaction, invoice: invoice2, result: :success)
+
+    get '/api/v1/revenue/items'
+
+    expect(response).to be_successful
+
+    items = JSON.parse(response.body, symbolize_names: true)
+
+    expect(items[:data].count).to eq(10)
+
+    items[:data].each do |merchant|
+      expect(merchant).to have_key(:type)
+      expect(merchant[:type]).to eq("item_revenue")
+
+      attributes = merchant[:attributes]
+      expect(attributes).to be_a(Hash)
+      expect(merchant).to have_key(:id)
+      expect(merchant[:id]).to be_a(String)
+
+      expect(attributes).to have_key(:name)
+      expect(attributes[:name]).to be_a(String)
+      expect(attributes).to have_key(:revenue)
+    end
+  end
+  it 'cant get items ranked by descending revenue when quantity as a string' do
+    get "/api/v1/revenue/items?quantity='asfasdf'"
+
+    expect(response).to_not be_successful
+  end
+  it 'cant get items ranked by descending revenue when there is no quantity params' do
+    merchant = create(:merchant)
+    item = create(:item, merchant: merchant)
+    item2 = create(:item, merchant: merchant)
+    item3 = create(:item, merchant: merchant)
+    invoice = create(:invoice)
+    invoice_item = create(:invoice_item, invoice: invoice, item: item)
+    invoice_item2 = create(:invoice_item, invoice: invoice, item: item2)
+    invoice_item3 = create(:invoice_item, invoice: invoice, item: item3)
+    transaction = create(:transaction, invoice: invoice, result: :success)
+
+    get "/api/v1/revenue/items?quantity="
+    expect(response).to_not be_successful
   end
 end

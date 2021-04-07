@@ -79,5 +79,26 @@ RSpec.describe Item, type: :model do
         expect(Item.find_all_by_price_range(2,4)).to eq([item2, item, item3])
       end
     end
+    describe "::items_with_most_revenue" do
+      it "finds items with most revenue" do
+        merchant = create(:merchant, id: 1)
+        item = create(:item, merchant: merchant)
+        item2 = create(:item, merchant: merchant)
+        item3 = create(:item, merchant: merchant)
+        invoice = create(:invoice)
+        invoice_item = create(:invoice_item, invoice: invoice, item: item, quantity: 7)
+        invoice_item2 = create(:invoice_item, invoice: invoice, item: item2)
+        invoice_item3 = create(:invoice_item, invoice: invoice, item: item3)
+        transaction = create(:transaction, invoice: invoice, result: :success)
+        item4 = create(:item, merchant: merchant)
+        item5 = create(:item, merchant: merchant)
+        item6 = create(:item, merchant: merchant)
+        invoice_item4 = create(:invoice_item, invoice: invoice, item: item4, quantity: 10)
+        invoice_item5 = create(:invoice_item, invoice: invoice, item: item5, quantity: 9)
+        invoice_item6 = create(:invoice_item, invoice: invoice, item: item6, quantity: 8)
+
+        expect(Item.items_with_most_revenue(4)).to eq([item4, item5, item6, item])
+      end
+    end
   end
 end
