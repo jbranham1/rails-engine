@@ -1,5 +1,24 @@
 class MerchantRevenueSerializer
-  include FastJsonapi::ObjectSerializer
-  attributes :name, :revenue
-  set_type :merchant_name_revenue
+  def self.format_merchant(revenue, id)
+    # {
+    #   data:
+    #   {
+    #     id: merchant.id,
+    #     attributes:
+    #     {
+    #       revenue: merchant.revenue
+    #     }
+    #   }
+    # }
+
+    {
+      data: {
+        id: id.to_s,
+        type: "merchant_revenue",
+        attributes: {
+          revenue: revenue
+        }
+      }
+    }
+  end
 end
