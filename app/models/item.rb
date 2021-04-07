@@ -31,6 +31,7 @@ class Item < ApplicationRecord
     where('unit_price <= ?',price)
     .order(:name)
   end
+  
   def self.find_one_by_price_range(min_price, max_price)
     find_all_by_price_range(min_price, max_price).first
   end
