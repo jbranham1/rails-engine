@@ -51,6 +51,7 @@ Rails Engine is an open-source API that allows you to search through merchants, 
     - Allows you to retrieve one merchant by name fragment
   - `GET /api/v1/merchants/find_all?name={name}`
     - Allows you to retrieve merchants by name fragment in alphabetical order
+    
 ### Items
   - `GET /api/v1/items`
     - Allows you to retrieve all merchants
@@ -82,6 +83,7 @@ Rails Engine is an open-source API that allows you to search through merchants, 
     - Allows you to retrieve all items with a price equal to or less than max_price
   - `GET /api/v1/items/find_all?min_price={number}&max_price={number}`
     - Allows you to retrieve all items with a price equal to or greater than min_price and equal to or less than max_price
+
 ### Business Intelligence
   - `GET api/v1/revenue/merchants?quantity={number}`
     - Allows you to get the top x number of merchants with the most revenue based on quantity
