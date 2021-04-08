@@ -11,10 +11,10 @@ Rails Engine is an open-source API that allows you to search through merchants, 
   - [Built With](#built-with)
   - [Endpoints](#endpoints)
     - [Merchants](#merchants)
-      - [Search Merchants](#search_merchants)
+      - [Search Merchants](#search-merchants)
     - [Items](#items)
-      - [Search Items](#search_items)
-    - [Business Intelligence](#business_intelligence)
+      - [Search Items](#search-items)
+    - [Business Intelligence](#business-intelligence)
   - [License](#license)
 ## Authors
 
