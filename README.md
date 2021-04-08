@@ -11,7 +11,9 @@ Rails Engine is an open-source API that allows you to search through merchants, 
   - [Built With](#built-with)
   - [Endpoints](#endpoints)
     - [Merchants](#merchants)
+      - [Search Merchants](#search_merchants)
     - [Items](#items)
+      - [Search Items](#search_items)
     - [Business Intelligence](#business_intelligence)
   - [License](#license)
 ## Authors
@@ -47,11 +49,13 @@ Rails Engine is an open-source API that allows you to search through merchants, 
     - Allows you to retrieve a merchant based on merchant_id
   - `GET /api/v1/merchants/{merchant_id}/items`
     - Allows you to retrieve a merchant's items based on merchant_id
+
+#### Search Merchants
   - `GET /api/v1/merchants/find?name={name}`
     - Allows you to retrieve one merchant by name fragment
   - `GET /api/v1/merchants/find_all?name={name}`
     - Allows you to retrieve merchants by name fragment in alphabetical order
-    
+
 ### Items
   - `GET /api/v1/items`
     - Allows you to retrieve all merchants
@@ -67,6 +71,7 @@ Rails Engine is an open-source API that allows you to search through merchants, 
     - Allows you to update an item based on item_id
   - `GET /api/v1/items/{item_id}/merchant`
     - Allows you to retrieve an item's merchant based on item_id
+#### Search Items
   - `GET /api/v1/items/find?name={name}`
     - Allows you to retrieve one item by name fragment
   - `GET /api/v1/items/find?min_price={number}`
