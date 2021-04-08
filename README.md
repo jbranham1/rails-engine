@@ -18,7 +18,7 @@ Rails Engine is an open-source API that allows you to search through merchants, 
   - [License](#license)
 ## Authors
 
-- **Jenny Branham** - [GitHub](https://github.com/jbranham) / [LinkedIn](www.linkedin.com/in/jenny-branham)
+- **Jenny Branham** - [GitHub](https://github.com/jbranham1) / [LinkedIn](https://www.linkedin.com/in/jenny-branham)
 
 
 ## Getting Started
