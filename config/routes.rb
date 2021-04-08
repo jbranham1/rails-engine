@@ -15,6 +15,7 @@ Rails.application.routes.draw do
         get '/find_all', to: 'search#find_all'
         resources :merchants, only: [:index, :show]
         resources :items, only: [:index]
+        resources :unshipped, only: [:index]
       end
       resources :items, only: [:index, :show, :create, :update, :destroy] do
         resources :merchant, only: [:index], controller: :item_merchant
@@ -22,6 +23,7 @@ Rails.application.routes.draw do
       resources :merchants, only: [:index, :show] do
         resources :items, only: [:index, :show], controller: :merchant_items
       end
+
     end
   end
 end
