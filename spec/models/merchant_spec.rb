@@ -67,20 +67,19 @@ RSpec.describe Merchant, type: :model do
         transaction2 = create(:transaction, invoice: invoice5, result: :success)
         merchant6 = create(:merchant)
 
-        expect(Merchant.merchants_with_most_items(4)).to eq([merchant, merchant2, merchant3, merchant4])
+        merchants = Merchant.merchants_with_most_items(4)
+        expect(merchants).to eq([merchant, merchant2, merchant3, merchant4])
+
+        expect(merchants.first.count).to eq(3)
       end
     end
     describe "::merchants_with_most_revenue" do
       it "finds merchants with most revenue" do
-        merchant = create(:merchant, id: 1)
-        item = create(:item, merchant: merchant)
-        item2 = create(:item, merchant: merchant)
-        item3 = create(:item, merchant: merchant)
-        invoice = create(:invoice)
-        invoice_item = create(:invoice_item, invoice: invoice, item: item)
-        invoice_item2 = create(:invoice_item, invoice: invoice, item: item2)
-        invoice_item3 = create(:invoice_item, invoice: invoice, item: item3)
-        transaction = create(:transaction, invoice: invoice, result: :success)
+        merchant = create(:merchant,id: 4)
+        item9 = create(:item, merchant: merchant)
+        invoice4 = create(:invoice)
+        invoice_item4 = create(:invoice_item, invoice: invoice4, item: item9)
+        transaction2 = create(:transaction, invoice: invoice4, result: :success)
         merchant2 = create(:merchant, id: 2)
         item4 = create(:item, merchant: merchant2)
         item5 = create(:item, merchant: merchant2)
@@ -97,11 +96,15 @@ RSpec.describe Merchant, type: :model do
         invoice_item7 = create(:invoice_item, invoice: invoice3, item: item7)
         invoice_item8 = create(:invoice_item, invoice: invoice3, item: item8)
         transaction3 = create(:transaction, invoice: invoice3, result: :success)
-        merchant4 = create(:merchant,id: 4)
-        item9 = create(:item, merchant: merchant4)
-        invoice4 = create(:invoice)
-        invoice_item4 = create(:invoice_item, invoice: invoice4, item: item9)
-        transaction2 = create(:transaction, invoice: invoice4, result: :success)
+        merchant4 = create(:merchant, id: 1)
+        item = create(:item, merchant: merchant4)
+        item2 = create(:item, merchant: merchant4)
+        item3 = create(:item, merchant: merchant4)
+        invoice = create(:invoice)
+        invoice_item = create(:invoice_item, invoice: invoice, item: item)
+        invoice_item2 = create(:invoice_item, invoice: invoice, item: item2)
+        invoice_item3 = create(:invoice_item, invoice: invoice, item: item3)
+        transaction = create(:transaction, invoice: invoice, result: :success)
         merchant5 = create(:merchant,id: 5)
         item10 = create(:item, merchant: merchant5)
         invoice5 = create(:invoice)
@@ -109,7 +112,10 @@ RSpec.describe Merchant, type: :model do
         transaction2 = create(:transaction, invoice: invoice5, result: :success)
         merchant6 = create(:merchant)
 
-        expect(Merchant.merchants_with_most_revenue(4)).to eq([merchant, merchant2, merchant3, merchant4])
+        merchants = Merchant.merchants_with_most_revenue(4)
+        expect(merchants).to eq([merchant4, merchant2, merchant3, merchant])
+
+        expect(merchants.first.revenue.to_f).to eq(29.97)
       end
     end
   end

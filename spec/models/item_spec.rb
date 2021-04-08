@@ -97,7 +97,10 @@ RSpec.describe Item, type: :model do
         invoice_item5 = create(:invoice_item, invoice: invoice, item: item5, quantity: 9)
         invoice_item6 = create(:invoice_item, invoice: invoice, item: item6, quantity: 8)
 
-        expect(Item.items_with_most_revenue(4)).to eq([item4, item5, item6, item])
+        items = Item.items_with_most_revenue(4)
+        expect(items).to eq([item4, item5, item6, item])
+
+        expect(items.first.revenue.to_f).to eq(99.9)
       end
     end
   end
