@@ -7,6 +7,8 @@ class Api::V1::Revenue::ItemsController < ApplicationController
     end
   end
 
+  private
+
   def quantity
     params.fetch(:quantity, 10).to_i
   end
